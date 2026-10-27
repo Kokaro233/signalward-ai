@@ -1,0 +1,62 @@
+[
+  {
+    "id": "normal-friend",
+    "text": "Can you bring my book tomorrow?",
+    "expected": "Green"
+  },
+  {
+    "id": "normal-bank",
+    "text": "Your monthly statement is available in the app.",
+    "expected": "Green"
+  },
+  {
+    "id": "normal-wallet",
+    "text": "My wallet balance is 20 BTC.",
+    "expected": "Green"
+  },
+  {
+    "id": "normal-reminder",
+    "text": "Please submit your assignment today.",
+    "expected": "Green"
+  },
+  {
+    "id": "scam-otp",
+    "text": "Your bank account is suspended. Send your OTP to this chat now.",
+    "expected": "Red"
+  },
+  {
+    "id": "scam-police",
+    "text": "I am the police. Transfer money to our safe account now. Tell nobody.",
+    "expected": "Red"
+  },
+  {
+    "id": "scam-seed",
+    "text": "Support needs your seed phrase to restore your wallet.",
+    "expected": "Red"
+  },
+  {
+    "id": "scam-refund",
+    "text": "Claim your airline refund now. Enter your card and OTP at https://refund.invalid.",
+    "expected": "Red"
+  },
+  {
+    "id": "ambiguous-marketing",
+    "text": "Our investment course targets high returns. Ask for details.",
+    "expected": "Yellow"
+  },
+  {
+    "id": "ambiguous-notice",
+    "text": "Please contact your bank about a pending issue.",
+    "expected": "Yellow"
+  },
+  {
+    "id": "ambiguous-caller",
+    "text": "My phone labels this caller Police. Is it real?",
+    "expected": "Yellow"
+  },
+  {
+    "id": "ambiguous-payment",
+    "text": "Can you pay the invoice? I do not recognize the sender.",
+    "expected": "Yellow"
+  }
+]

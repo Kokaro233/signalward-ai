@@ -1,0 +1,30 @@
+{
+  "name": "signalward-ai",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "node .next/standalone/server.js",
+    "lint": "next lint",
+    "models:nebius": "node scripts/list-nebius-models.mjs",
+    "risk:eval": "node scripts/risk-eval.mjs",
+    "test": "node scripts/review-tests.cjs",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "html-to-image": "^1.11.13",
+    "mongodb": "^6.15.0",
+    "next": "^15.3.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "eslint": "^9.25.1",
+    "eslint-config-next": "^15.3.2",
+    "typescript": "^5.8.3"
+  }
+}

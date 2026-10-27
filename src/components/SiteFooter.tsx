@@ -1,0 +1,1 @@
+export function SiteFooter(){return <footer style={{padding:"32px",textAlign:"center",color:"#9eb2c9"}}>SignalWard · Qwen + NVIDIA Nemotron via Nebius Token Factory<br/><small>AI risk assistance, not identity or authenticity certification. Model availability depends on server configuration.</small></footer>;}
