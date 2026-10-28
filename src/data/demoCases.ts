@@ -87,11 +87,11 @@ export const demoCases: DemoCase[] = [
       tool_timeline: [
         "Qwen Analyzer extracted the suspicious refund request.",
         "Cognitive Triage detected Authority + Urgency + Financial Request.",
-        "MongoDB Pattern Memory matched airline refund phishing behavior.",
+        "Supabase Pattern Memory matched airline refund phishing behavior.",
         "Bodyguard Mode prepared verification guidance and a safe reply."
       ],
       tool_calls: [
-        { tool: "MongoDB Pattern Memory", result: "Matched SEA-AIRLINE-REFUND-001." },
+        { tool: "Supabase Pattern Memory", result: "Matched SEA-AIRLINE-REFUND-001." },
         { tool: "Safe Reply Generator", result: "Prepared a reply that avoids sharing card data." }
       ],
       agent_actions: [
@@ -160,13 +160,13 @@ export const demoCases: DemoCase[] = [
       tool_timeline: [
         "Qwen Analyzer extracted official-identity claims, legal threats, secrecy, and payment demand.",
         "Cognitive Triage detected Authority + Fear + Isolation + Urgency + Financial Demand.",
-        "MongoDB Pattern Memory matched fake embassy / police scam pattern.",
+        "Supabase Pattern Memory matched fake embassy / police scam pattern.",
         "Bodyguard Mode activated because multiple high-risk signals combined.",
         "Safe Reply Generator prepared a non-disclosing response.",
         "Evidence Summary generated a shareable note for a trusted person."
       ],
       tool_calls: [
-        { tool: "MongoDB Pattern Memory", result: "Matched SEA-EMBASSY-001." },
+        { tool: "Supabase Pattern Memory", result: "Matched SEA-EMBASSY-001." },
         { tool: "Safe Reply Generator", result: "Prepared non-disclosing reply." },
         { tool: "Evidence Summary", result: "Prepared trusted-person review note." }
       ],
@@ -235,11 +235,11 @@ export const demoCases: DemoCase[] = [
       tool_timeline: [
         "Qwen Analyzer extracted account-warning messages and URLs.",
         "Cognitive Triage detected Brand Impersonation + Urgency + Account Threat + Suspicious Link.",
-        "MongoDB Pattern Memory matched account verification phishing behavior.",
+        "Supabase Pattern Memory matched account verification phishing behavior.",
         "Bodyguard Mode prepared official-channel verification guidance."
       ],
       tool_calls: [
-        { tool: "MongoDB Pattern Memory", result: "Matched SOCIAL-ACCOUNT-VERIFY-001." },
+        { tool: "Supabase Pattern Memory", result: "Matched SOCIAL-ACCOUNT-VERIFY-001." },
         { tool: "Safe Reply Generator", result: "Prepared a reply that avoids opening links." }
       ],
       agent_actions: [

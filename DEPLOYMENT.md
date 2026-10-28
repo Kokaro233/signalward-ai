@@ -11,6 +11,6 @@ Deploy SignalWard as a separate Next.js 15 application on Vercel or another Node
 - `NEBIUS_MODEL` (choose an ID returned by `npm run models:nebius`)
 - `NEBIUS_BASE_URL=https://api.tokenfactory.nebius.com/v1`
 
-MongoDB is optional. If used, configure `MONGODB_URI` and `MONGODB_DB=signalward`.
+Supabase is optional. If used, configure `SUPABASE_URL` and the server-only `SUPABASE_SERVICE_ROLE_KEY`, then run `docs/supabase-schema.sql` once in the Supabase SQL editor.
 
 Keep every key server-side and never commit `.env.local`. Allow at least 110 seconds for the two sequential inference requests. Before recording the demo, run a real text case, a real screenshot case, and a forced reviewer-failure case so the UI visibly distinguishes full dual-model review from primary-only analysis.

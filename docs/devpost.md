@@ -20,14 +20,14 @@ The result includes a calibrated risk level, evidence cards, verification steps,
 - Qwen `qwen3-vl-plus` through DashScope's OpenAI-compatible API for text and screenshot understanding
 - NVIDIA Nemotron through the Nebius Token Factory OpenAI-compatible API for blinded evidence review
 - Deterministic TypeScript reconciliation that retains the higher caution level while visibly flagging disagreement
-- Optional MongoDB Pattern Memory for anonymized scam-pattern retrieval
+- Optional Supabase Postgres Pattern Memory for anonymized scam-pattern retrieval
 - Local browser storage for reports the user explicitly saves
 
 For screenshots, Nemotron reviews text and evidence extracted by Qwen; it does not independently see the image. The product states this limitation in the interface and documentation.
 
 ## What is new for this project
 
-SignalWard evolves from the earlier LUCID cognitive-triage project. The inherited foundation includes the Next.js interface, multilingual investigation flow, screenshot workflow, illustrative cases, saved reports, safe actions, and MongoDB utilities.
+SignalWard evolves from the earlier LUCID cognitive-triage project. The inherited foundation includes the Next.js interface, multilingual investigation flow, screenshot workflow, illustrative cases, saved reports, and safe actions. SignalWard replaces the former MongoDB utility with an optional Supabase Postgres Pattern Memory.
 
 New work includes the SignalWard brand and product structure, the Qwen adapter aligned with the current local LUCID configuration, the NVIDIA Nemotron reviewer, blinded reviewer input, strict JSON validation, deterministic disagreement handling, explicit primary-only failure states, independent-review UI, and reproducible evaluation fixtures. Full provenance is documented in `docs/project-evolution.md`.
 

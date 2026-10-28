@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { savePatternMongo } from "@/lib/mongodb";
+import { hasSupabaseConfig, savePatternSupabase } from "@/lib/supabase";
 import type { PatternRecord } from "@/lib/types";
 
 export async function POST(request: Request) {
@@ -17,12 +17,12 @@ export async function POST(request: Request) {
   };
 
   try {
-    if (process.env.MONGODB_URI) {
-      const saved = await savePatternMongo(pattern);
-      return NextResponse.json({ source: "mongodb", saved });
+    if (hasSupabaseConfig()) {
+      const saved = await savePatternSupabase(pattern);
+      return NextResponse.json({ source: "supabase", saved });
     }
   } catch (error) {
-    console.error("MongoDB pattern save fallback:", error);
+    console.error("Supabase pattern save fallback:", error);
   }
 
   return NextResponse.json({
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
     saved: {
       ...pattern,
       storage_policy: "anonymized_pattern_only",
-      note: "MongoDB is not configured; this pattern was not persisted."
+      note: "Supabase is not configured; this pattern was not persisted."
     }
   });
 }

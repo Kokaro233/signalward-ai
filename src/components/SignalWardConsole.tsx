@@ -455,7 +455,7 @@ export function SignalWardConsole() {
           safeResponseTitle: "在不透露更多信息的情况下回复。",
           summaryTitle: "可以发给可信任的人看的摘要。",
           verifyTitle: "只使用独立渠道核实。",
-          memoryTitle: "MongoDB 模式记忆",
+          memoryTitle: "Supabase 模式记忆",
           memoryUpdated: "模式记忆已更新。",
           memoryBody: "SignalWard 只保存匿名化的策略、短语、场景和风险等级，不保存完整私人对话。",
           memoryAskTitle: "你想帮助别人吗？",
@@ -466,8 +466,8 @@ export function SignalWardConsole() {
           memorySaving: "正在保存匿名模式...",
           memoryThanksTitle: "谢谢，你帮助完善了防护记忆。",
           memoryThanksBody: "这次只保存匿名化模式，之后可帮助 SignalWard 识别相似压力套路。",
-          memoryVisible: "已加入本页模式记忆；如果 MongoDB 已配置，也可以在 Atlas 的 cases collection 里看到。",
-          memoryFailed: "保存失败。请稍后再试，或检查 MongoDB 环境变量。",
+          memoryVisible: "已加入本页模式记忆；如果 Supabase 已配置，也会保存在 patterns 表中。",
+          memoryFailed: "保存失败。请稍后再试，或检查 Supabase 环境变量。",
           localMemory: "我的保存记录",
           localMemoryBody: "保存本次复核到这台设备，方便之后回看。不会上传完整聊天内容。",
           saveReview: "保存本次复核",
@@ -487,14 +487,14 @@ export function SignalWardConsole() {
           safestActions: ["不要转账", "不要点链接", "找可信任的人确认"],
           sourceQwen: "实时 Qwen",
           sourceFallback: "示例报告 · 非实时",
-          mongoMemory: "MongoDB 模式记忆",
+          mongoMemory: "Supabase 模式记忆",
           step1: "1 输入材料",
           step2: "2 安全扫描",
           step3: "3 查看结果",
           callMode: "电话语音怎么办？",
           callModeBody: "先不要按对方指令操作。把电话内容简单写下来，或用系统转写后粘贴到这里；后续可以接语音转文字。",
           learning: "学习模式",
-          learningBody: "用户可以保存匿名模式，进入 MongoDB 记忆库；它不会直接训练模型，也不会保存完整隐私聊天。",
+          learningBody: "用户可以保存匿名模式，进入 Supabase 记忆库；它不会直接训练模型，也不会保存完整隐私聊天。",
           scanningTitle: "正在识别压力模式",
           scanningBody: "SignalWard 正在读取截图、区分你和对方的消息，并检查恐惧、隔离、转账、威胁和验证码等信号。",
           selectedCount: "张截图已选择",
@@ -555,7 +555,7 @@ export function SignalWardConsole() {
           safeResponseTitle: "Reply without leaking more information.",
           summaryTitle: "Shareable note for a trusted person.",
           verifyTitle: "Use independent channels only.",
-          memoryTitle: "MongoDB Pattern Memory",
+          memoryTitle: "Supabase Pattern Memory",
           memoryUpdated: "Pattern memory updated.",
           memoryBody:
             "SignalWard saves only anonymized tactics, phrases, scenario, and risk level. It does not store the full private conversation.",
@@ -567,8 +567,8 @@ export function SignalWardConsole() {
           memorySaving: "Saving anonymized pattern...",
           memoryThanksTitle: "Thank you for improving protective memory.",
           memoryThanksBody: "Only the anonymized pattern was saved. It can help SignalWard recognize similar pressure tactics later.",
-          memoryVisible: "Added to Pattern Memory on this page. If MongoDB is configured, it is also visible in the Atlas cases collection.",
-          memoryFailed: "Save failed. Please try again later or check the MongoDB environment variables.",
+          memoryVisible: "Added to Pattern Memory on this page. If Supabase is configured, it is also stored in the patterns table.",
+          memoryFailed: "Save failed. Please try again later or check the Supabase environment variables.",
           localMemory: "My saved reviews",
           localMemoryBody: "Save this review on this device so you can revisit it later. Full private chat text is not uploaded.",
           saveReview: "Save this review",
@@ -588,14 +588,14 @@ export function SignalWardConsole() {
           safestActions: ["Do not transfer money", "Do not open links", "Ask a trusted person to verify"],
           sourceQwen: "Live Qwen",
           sourceFallback: "Sample report · not live",
-          mongoMemory: "MongoDB Pattern Memory",
+          mongoMemory: "Supabase Pattern Memory",
           step1: "1 Input",
           step2: "2 Safety scan",
           step3: "3 Results",
           callMode: "Phone call?",
           callModeBody: "Do not follow instructions from the caller yet. Paste a short call transcript or notes here; voice-to-text can be added next.",
           learning: "Learning mode",
-          learningBody: "Users can save anonymized patterns into MongoDB memory. It does not directly train the model or store full private chats.",
+          learningBody: "Users can save anonymized patterns into Supabase memory. It does not directly train the model or store full private chats.",
           scanningTitle: "Scanning pressure patterns",
           scanningBody: "SignalWard is reading screenshots, separating your messages from the other party, and checking fear, isolation, payment, threats, and OTP signals.",
           selectedCount: "screenshots selected",
@@ -726,7 +726,7 @@ export function SignalWardConsole() {
       .replace("Evidence Summary compiled key scam indicators.", "证据摘要已整理关键诈骗信号。")
       .replace("Escalation Gate kept Bodyguard Mode off.", "升级判断保持 Bodyguard Mode 关闭。")
       .replace("No Pattern Memory search was required.", "无需检索模式记忆。")
-      .replace(/MongoDB Pattern Memory returned (\d+) similar anonymized pattern(s)?\./, "MongoDB 模式记忆返回 $1 个相似匿名模式。");
+      .replace(/Supabase Pattern Memory returned (\d+) similar anonymized pattern(s)?\./, "Supabase 模式记忆返回 $1 个相似匿名模式。");
   }
 
   function localizedDemoText(demo: DemoCase) {

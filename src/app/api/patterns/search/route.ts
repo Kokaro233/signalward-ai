@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { searchLocalPatterns } from "@/lib/fallback";
-import { searchPatternsMongo } from "@/lib/mongodb";
+import { hasSupabaseConfig, searchPatternsSupabase } from "@/lib/supabase";
 
 export async function POST(request: Request) {
   const body = (await request.json()) as {
@@ -9,12 +9,12 @@ export async function POST(request: Request) {
   };
 
   try {
-    if (process.env.MONGODB_URI) {
-      const patterns = await searchPatternsMongo(body.manipulation_chain ?? [], body.scenario);
-      return NextResponse.json({ source: "mongodb", patterns });
+    if (hasSupabaseConfig()) {
+      const patterns = await searchPatternsSupabase(body.manipulation_chain ?? [], body.scenario);
+      return NextResponse.json({ source: "supabase", patterns });
     }
   } catch (error) {
-    console.error("MongoDB pattern search fallback:", error);
+    console.error("Supabase pattern search fallback:", error);
   }
 
   const patterns = searchLocalPatterns(body.manipulation_chain ?? [], body.scenario);

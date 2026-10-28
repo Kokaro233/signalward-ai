@@ -13,6 +13,8 @@ Keys stay server-side. `QWEN_API_KEY` and the legacy `DASHSCOPE_API_KEY` name ar
 
 Analysis failures return 503; independent review failures return a clearly labeled primary-only report. Case inputs run the live pipeline; static reports are labeled samples. Nemotron sees extracted text rather than images. Extracted image content is a shared dependency, so review is not independent visual verification. No suspicious URL is fetched. Local saved reports remain browser-local. Model providers receive submitted evidence: remove private information first.
 
+Optional Pattern Memory uses Supabase Postgres through server-only REST credentials. Run `docs/supabase-schema.sql` once, then configure `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`. If Supabase is unavailable, search falls back to bundled anonymized patterns and writes are clearly marked as not persisted.
+
 ## Provenance
 Derived from [LUCID](https://github.com/Kokaro233/lucid-cognitive-triage-agent), previously submitted to Google Cloud Rapid Agent Hackathon. See [project evolution](docs/project-evolution.md) for inherited and new work. Rebranding does not change that provenance. Preserve the MIT license.
 

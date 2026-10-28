@@ -48,5 +48,5 @@ Avoid aggressive crawling, login scraping, or bypassing platform protections. Th
 
 1. Prepare a JSON file of anonymized patterns.
 2. Review for privacy.
-3. Import into MongoDB `patterns`.
+3. Import into the Supabase `patterns` table.
 4. Show only pattern IDs and scenario names in the app.

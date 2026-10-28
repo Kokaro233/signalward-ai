@@ -1,5 +1,8 @@
+import https from "node:https";
+
 type Provider = "QWEN" | "NEBIUS";
 type Message = { role: string; content: unknown };
+type CompletionPayload = { choices?: Array<{ message?: { content?: unknown } }> };
 
 const defaults = {
   QWEN: {
@@ -30,33 +33,71 @@ export async function completion(
   json = true
 ): Promise<string> {
   const { key, model, baseUrl } = providerConfig(provider);
-  const response = await fetch(`${baseUrl}/chat/completions`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${key}`,
-      "Content-Type": "application/json"
-    },
-    signal: AbortSignal.timeout(55_000),
-    body: JSON.stringify({
-      model,
-      messages,
-      temperature: 0.2,
-      max_tokens: 4096,
-      ...(json ? { response_format: { type: "json_object" } } : {})
-    })
+  const requestBody = JSON.stringify({
+    model,
+    messages,
+    temperature: 0.2,
+    max_tokens: 4096,
+    ...(json ? { response_format: { type: "json_object" } } : {})
   });
-
-  if (!response.ok) {
-    const details = (await response.text()).slice(0, 500);
-    throw new Error(`${provider} request failed (${response.status}): ${details}`);
-  }
-
-  const payload = await response.json();
+  const payload = provider === "QWEN"
+    ? await nodeHttpsJson(`${baseUrl}/chat/completions`, key, requestBody)
+    : await fetchJson(`${baseUrl}/chat/completions`, key, requestBody, provider);
   const content = payload.choices?.[0]?.message?.content;
   if (typeof content !== "string" || !content.trim()) {
     throw new Error(`${provider} returned no content`);
   }
   return content;
+}
+
+async function fetchJson(url: string, key: string, body: string, provider: Provider): Promise<CompletionPayload> {
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+    signal: AbortSignal.timeout(55_000),
+    body
+  });
+  if (!response.ok) {
+    const details = (await response.text()).slice(0, 500);
+    throw new Error(`${provider} request failed (${response.status}): ${details}`);
+  }
+  return response.json() as Promise<CompletionPayload>;
+}
+
+function nodeHttpsJson(url: string, key: string, body: string): Promise<CompletionPayload> {
+  return new Promise((resolve, reject) => {
+    const request = https.request(
+      url,
+      {
+        method: "POST",
+        family: 4,
+        headers: {
+          Authorization: `Bearer ${key}`,
+          "Content-Type": "application/json",
+          "Content-Length": Buffer.byteLength(body)
+        }
+      },
+      (response) => {
+        const chunks: Buffer[] = [];
+        response.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
+        response.on("end", () => {
+          const text = Buffer.concat(chunks).toString("utf8");
+          if (!response.statusCode || response.statusCode < 200 || response.statusCode >= 300) {
+            reject(new Error(`QWEN request failed (${response.statusCode ?? "unknown"}): ${text.slice(0, 500)}`));
+            return;
+          }
+          try {
+            resolve(JSON.parse(text));
+          } catch {
+            reject(new Error("QWEN returned invalid JSON"));
+          }
+        });
+      }
+    );
+    request.setTimeout(55_000, () => request.destroy(new Error("QWEN request timed out")));
+    request.on("error", reject);
+    request.end(body);
+  });
 }
 
 export function parseObject(raw: string): unknown {

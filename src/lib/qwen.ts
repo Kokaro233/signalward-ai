@@ -4,7 +4,7 @@ import { validateAnalysis } from "./validation";
 export async function analyzeWithQwen(input: {text?: string; imageBase64?: string; imagesBase64?: string[]; mimeType?: string; mimeTypes?: string[]; outputLanguage?: "en" | "zh"}): Promise<AnalysisResult> {
   const outputLanguage =
     input.outputLanguage === "zh"
-      ? "Simplified Chinese. Keep product names like SignalWard, Qwen, MongoDB, Bodyguard Mode in English if needed."
+      ? "Simplified Chinese. Keep product names like SignalWard, Qwen, Supabase, Bodyguard Mode in English if needed."
       : "English only. Do not include Chinese translations unless the submitted evidence phrase itself is Chinese.";
 
   const prompt = `You are SignalWard, an AI Cognitive Triage Agent for scam-resistant decisions.
@@ -18,7 +18,7 @@ Rules:
 4. Do not reveal hidden chain-of-thought. Use short evidence-based reasoning only.
 5. Assign risk_level as exactly one of: Green, Yellow, Orange, Red.
 6. Orange or Red must activate bodyguard_mode. Green or Yellow should not unless there is a clear sensitive context.
-7. Tool timeline must explicitly name: Qwen Analyzer, Cognitive Triage, MongoDB Pattern Memory when applicable, Safe Reply Generator, Evidence Summary when applicable.
+7. Tool timeline may name only work performed inside this request: Qwen Analyzer, Cognitive Triage, Safe Reply Generator, and Evidence Summary. Never claim that Supabase Pattern Memory ran or matched a record; database search happens separately in application code.
 8. Do not claim legal or financial authority. Recommend pause, official verification, trusted-person review, and user-controlled action.
 9. Screenshots may be Chinese, English, Malay, or mixed-language. Perform OCR on the visible text and inspect UI elements such as chat bubbles, sender direction, URLs/domains, buttons, countdowns, wallet balances, exchange navigation, brand names, and fake-brand cues. Keep evidence.text as the exact original phrase when possible, including Chinese phrases.
 10. If the screenshot contains Chinese scam language such as 大使馆, 公安, 涉嫌诈骗, 拘留, 转账, 不要告诉别人, 不要挂电话, 验证码, 保证金, 解冻, 手续费, 助记词, 私钥, treat it as authority/fear/isolation/financial-demand/sensitive-data evidence when the context supports it.
@@ -34,6 +34,12 @@ Risk calibration:
 - Yellow: suspicious but incomplete signal, unknown investment page, exaggerated marketing, ordinary link, incomplete screenshot, or unclear sender direction without a concrete demand.
 - Orange: clear scam structure or pressure pattern, but no final payment/sensitive-data demand is visible yet.
 - Red: strong combined evidence such as official/brand impersonation + threat/account suspension/legal fear + immediate action + link/payment/OTP/account recovery/private key/seed phrase/fee/unlock/tax/guarantee demand.
+
+Score calibration (overall_risk_score is an integer from 0 to 100, not a 0-10 score):
+- Green: 0-29
+- Yellow: 30-59
+- Orange: 60-79
+- Red: 80-100
 
 High-risk patterns to recognize:
 - Social account phishing: WhatsApp/Telegram/Instagram/bank/security center messages claiming suspension, restriction, verification, deletion, or account recovery through a non-official link.
