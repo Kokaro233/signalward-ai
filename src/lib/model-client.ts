@@ -5,8 +5,13 @@ type Message = { role: string; content: unknown };
 type CompletionPayload = { choices?: Array<{ message?: { content?: unknown } }> };
 
 const providerTimeoutMs: Record<Provider, number> = {
-  QWEN: 105_000,
+  QWEN: 120_000,
   NEBIUS: 45_000
+};
+
+const providerMaxTokens: Record<Provider, number> = {
+  QWEN: 1_800,
+  NEBIUS: 1_000
 };
 
 const defaults = {
@@ -42,7 +47,8 @@ export async function completion(
     model,
     messages,
     temperature: 0.2,
-    max_tokens: 4096,
+    max_tokens: providerMaxTokens[provider],
+    ...(provider === "QWEN" ? { enable_thinking: false } : {}),
     ...(json ? { response_format: { type: "json_object" } } : {})
   });
   const payload = provider === "QWEN"
@@ -86,6 +92,7 @@ function nodeHttpsJson(url: string, key: string, body: string, timeoutMs: number
         const chunks: Buffer[] = [];
         response.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
         response.on("end", () => {
+          clearTimeout(deadline);
           const text = Buffer.concat(chunks).toString("utf8");
           if (!response.statusCode || response.statusCode < 200 || response.statusCode >= 300) {
             reject(new Error(`QWEN request failed (${response.statusCode ?? "unknown"}): ${text.slice(0, 500)}`));
@@ -99,8 +106,14 @@ function nodeHttpsJson(url: string, key: string, body: string, timeoutMs: number
         });
       }
     );
-    request.setTimeout(timeoutMs, () => request.destroy(new Error(`QWEN request timed out after ${timeoutMs}ms`)));
-    request.on("error", reject);
+    const deadline = setTimeout(
+      () => request.destroy(new Error(`QWEN request timed out after ${timeoutMs}ms`)),
+      timeoutMs
+    );
+    request.on("error", (error) => {
+      clearTimeout(deadline);
+      reject(error);
+    });
     request.end(body);
   });
 }
