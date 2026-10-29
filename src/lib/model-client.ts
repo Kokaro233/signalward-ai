@@ -4,6 +4,11 @@ type Provider = "QWEN" | "NEBIUS";
 type Message = { role: string; content: unknown };
 type CompletionPayload = { choices?: Array<{ message?: { content?: unknown } }> };
 
+const providerTimeoutMs: Record<Provider, number> = {
+  QWEN: 105_000,
+  NEBIUS: 45_000
+};
+
 const defaults = {
   QWEN: {
     model: "qwen3-vl-plus",
@@ -41,7 +46,7 @@ export async function completion(
     ...(json ? { response_format: { type: "json_object" } } : {})
   });
   const payload = provider === "QWEN"
-    ? await nodeHttpsJson(`${baseUrl}/chat/completions`, key, requestBody)
+    ? await nodeHttpsJson(`${baseUrl}/chat/completions`, key, requestBody, providerTimeoutMs.QWEN)
     : await fetchJson(`${baseUrl}/chat/completions`, key, requestBody, provider);
   const content = payload.choices?.[0]?.message?.content;
   if (typeof content !== "string" || !content.trim()) {
@@ -54,7 +59,7 @@ async function fetchJson(url: string, key: string, body: string, provider: Provi
   const response = await fetch(url, {
     method: "POST",
     headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-    signal: AbortSignal.timeout(55_000),
+    signal: AbortSignal.timeout(providerTimeoutMs[provider]),
     body
   });
   if (!response.ok) {
@@ -64,7 +69,7 @@ async function fetchJson(url: string, key: string, body: string, provider: Provi
   return response.json() as Promise<CompletionPayload>;
 }
 
-function nodeHttpsJson(url: string, key: string, body: string): Promise<CompletionPayload> {
+function nodeHttpsJson(url: string, key: string, body: string, timeoutMs: number): Promise<CompletionPayload> {
   return new Promise((resolve, reject) => {
     const request = https.request(
       url,
@@ -94,7 +99,7 @@ function nodeHttpsJson(url: string, key: string, body: string): Promise<Completi
         });
       }
     );
-    request.setTimeout(55_000, () => request.destroy(new Error("QWEN request timed out")));
+    request.setTimeout(timeoutMs, () => request.destroy(new Error(`QWEN request timed out after ${timeoutMs}ms`)));
     request.on("error", reject);
     request.end(body);
   });
