@@ -14,7 +14,21 @@ export async function POST(request: Request) {
  if (!Array.isArray(mimeTypes) || mimeTypes.some((x: unknown) => typeof x !== "string" || !allowedMimeTypes.has(x))) return NextResponse.json({error:"Unsupported image type"},{status:400});
  if (!body.text?.trim() && !images.length) return NextResponse.json({error:"Submit text or an image"},{status:400});
  let result = await analyzeWithQwen(body);
- try { result = reconcile(result, await reviewWithNemotron(body.text ?? "",result,Boolean(images.length),body.outputLanguage ?? "en")); }
+ const sampleTranscript = body.sampleImageTranscript === true;
+ try {
+   result = reconcile(
+     result,
+     await reviewWithNemotron(
+       body.text ?? "",
+       result,
+       Boolean(images.length) || sampleTranscript,
+       body.outputLanguage ?? "en",
+       sampleTranscript
+     )
+   );
+   if (sampleTranscript) result = {...result,image_review_basis:"sample_transcript"};
+   else if (images.length) result = {...result,image_review_basis:"qwen_extracted"};
+ }
  catch { result = {...result, primary_risk_level:result.risk_level,reconciliation:"unavailable",tool_timeline:[...result.tool_timeline,"Independent review unavailable; primary analysis only."]}; }
  return NextResponse.json(result);
  } catch (error) {

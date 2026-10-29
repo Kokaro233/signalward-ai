@@ -36,6 +36,7 @@ export type AnalysisResult = {
   bodyguard_mode: boolean;
   source: "qwen" | "fallback";
   primary_risk_level?: RiskLevel;
+  image_review_basis?: "qwen_extracted" | "sample_transcript";
   independent_review?: IndependentReview;
   reconciliation?: "agreement" | "disagreement" | "unavailable";
 };

@@ -860,17 +860,20 @@ export function SignalWardConsole() {
       const submittedImages = payload?.imagesBase64 ?? imagePreviews;
       const submittedImageMimes = payload?.mimeTypes ?? imageMimes;
       const sampleId = payload?.demoCaseId ?? activeDemoId ?? undefined;
-      const shouldUsePresetDemo = Boolean(sampleId && !payload?.imageBase64 && submittedImages.length === 0);
+      const sampleCase = sampleId ? demoCases.find((demo) => demo.id === sampleId) : undefined;
+      const sampleHasImage = Boolean(sampleCase && (sampleCase.image || sampleCase.images?.length));
+      const submittedText = sampleCase ? localizedDemoText(sampleCase) : (payload?.text ?? text);
       const next = await postJson<AnalyzeResponse>("/api/analyze", {
-        text: [payload?.text ?? text, urlInput ? `Suspicious URL submitted by user: ${urlInput}` : ""]
+        text: [submittedText, urlInput ? `Suspicious URL submitted by user: ${urlInput}` : ""]
           .filter(Boolean)
           .join("\n\n"),
         imageBase64: payload?.imageBase64,
-        imagesBase64: submittedImages,
+        imagesBase64: sampleCase ? [] : submittedImages,
         mimeType: payload?.mimeType,
-        mimeTypes: submittedImageMimes,
+        mimeTypes: sampleCase ? [] : submittedImageMimes,
         outputLanguage: language,
-        demoCaseId: shouldUsePresetDemo ? sampleId : undefined
+        demoCaseId: sampleId,
+        sampleImageTranscript: sampleHasImage
       });
       setResult(next);
       setStatus(`Analysis complete via ${next.source === "qwen" ? "Qwen" : "fallback"}`);
